@@ -25,17 +25,21 @@ public class FTT_Sockets {
      */
     public static void main(String[] args) throws IOException {
         server = new ServerSocket(port);
-        System.out.println("Porta do servidor:" + server.getLocalPort());
+        System.out.println("****serviço de impressão****\n\nPorta do servidor:" + server.getLocalPort());
         GerenciaImpressora.getInstance().ativar();
+        boolean ativo = true;
         try{
-            while(true){
+            while(ativo){
                 Socket socket = server.accept();
                 ThreadCliente client = new ThreadCliente(socket);
                 client.start();
+                if(!client.isAlive())
+                    ativo = false;
             }
         }
         finally{
             GerenciaImpressora.getInstance().desativar();
+            System.out.println("****serviço finalizado*****");
         }
     }
     
